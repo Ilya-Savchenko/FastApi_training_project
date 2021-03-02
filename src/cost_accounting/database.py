@@ -8,8 +8,15 @@ engine = create_engine(
 	connect_args={'check_same_thread': False},
 )
 
-session = sessionmaker(
+Session = sessionmaker(
 	engine,
 	autocommit=False,
 	autoflush=False,
 )
+
+def get_session() -> Session:
+	session = Session()
+	try:
+		yield session
+	finally:
+		session.close()
